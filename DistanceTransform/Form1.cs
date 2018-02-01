@@ -24,11 +24,16 @@ namespace DistanceTransform
         {
             Image<Bgr, byte> img = new Image<Bgr, byte>("hand.jpg");
             //If pixel value greater than threadshold, set it to black, else set it to white
-            var binImg = img.Convert<Gray, byte>().ThresholdBinary(new Gray(210), new Gray(255));
-            
-            imageBox1.Image = binImg;
-            imageBox1.Height = binImg.Height;
-            imageBox1.Width = binImg.Width;
+            var oldImg = img.Convert<Gray, byte>().ThresholdBinary(new Gray(210), new Gray(255));
+            var newImg = new Mat();
+            CvInvoke.Invert(oldImg.Mat, newImg, Emgu.CV.CvEnum.DecompMethod.LU);
+            //var dst = new Mat();
+            //CvInvoke.DistanceTransform(binImg.Mat, dst, null, Emgu.CV.CvEnum.DistType.L1, 3);
+            //var newImg = dst.ToImage<Bgr, byte>();
+            var result = newImg.ToImage<Gray, byte>();
+            imageBox1.Image = result;
+            imageBox1.Height = result.Height;
+            imageBox1.Width = result.Width;
         }
     }
 }
